@@ -25,10 +25,11 @@ class RubysCube
       @renderer = Mittsu::OpenGLRenderer.new width: @screen_width, height: @screen_height, title: %q{Ruby's Cube}
 
       @scene = Mittsu::Scene.new
-      #@scene.override_material = Mittsu::MeshBasicMaterial.new(color: 0xDDDDDD)
 
       setup_camera
       setup_cube
+      setup_room
+      setup_light
 
       @renderer.window.run do
         @renderer.render(@scene, @camera)
@@ -69,6 +70,20 @@ class RubysCube
         box.position.x = (i * 1.0) - @colors.count / 2.0
         @scene.add box
       end
+    end
+
+    def setup_room
+      room_material = Mittsu::MeshPhongMaterial.new(color: 0xffffff)
+      room_material.side = Mittsu::BackSide
+      room = Mittsu::Mesh.new(Mittsu::SphereGeometry.new(1.0), room_material)
+      room.scale.set(10.0, 10.0, 10.0)
+      @scene.add(room)
+    end
+
+    def setup_light
+      # white, half intensity
+      light = Mittsu::HemisphereLight.new(0xFFFFFF, 0xFFFFFF, 0.5)
+      @scene.add(light)
     end
   end
 end
