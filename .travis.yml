@@ -2,5 +2,7 @@ sudo: false
 language: ruby
 rvm:
   - 2.3.3
+env:
+  - SKIP_UI_TESTS=true
 script:
   - bundle exec rspec
