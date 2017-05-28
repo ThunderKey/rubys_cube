@@ -67,7 +67,7 @@ class RubysCube
       (0..2).to_a.repeated_permutation(3).each do |x,y,z|
         box = Mittsu::Mesh.new(
           Mittsu::BoxGeometry.new(1.0, 1.0, 1.0),
-          Mittsu::MeshBasicMaterial.new(color: @colors[rand(@colors.size)])
+          Mittsu::MeshBasicMaterial.new(color: @colors[(x + y + z) % @colors.size])
         )
         box.position.x = x - 1
         box.position.y = y - 1
