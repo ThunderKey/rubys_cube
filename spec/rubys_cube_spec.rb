@@ -2,10 +2,6 @@ require "spec_helper"
 
 RSpec.describe RubysCube do
   it "has a version number" do
-    expect(RubysCube::VERSION).not_to be nil
-  end
-
-  it "does something useful" do
-    expect(false).to eq(true)
+    expect(described_class::VERSION).not_to be nil
   end
 end
