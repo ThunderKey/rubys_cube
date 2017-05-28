@@ -62,12 +62,14 @@ class RubysCube
     end
 
     def setup_cube
-      @colors.each_with_index do |c, i|
+      (0..2).to_a.repeated_permutation(3).each do |x,y,z|
         box = Mittsu::Mesh.new(
           Mittsu::BoxGeometry.new(1.0, 1.0, 1.0),
-          Mittsu::MeshBasicMaterial.new(color: c)
+          Mittsu::MeshBasicMaterial.new(color: @colors[rand(@colors.size)])
         )
-        box.position.x = (i * 1.0) - @colors.count / 2.0
+        box.position.x = x - 1
+        box.position.y = y - 1
+        box.position.z = z - 1
         @scene.add box
       end
     end

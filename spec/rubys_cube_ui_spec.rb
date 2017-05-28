@@ -17,7 +17,8 @@ RSpec.describe RubysCube do
     end
 
     it 'has the correct amount of boxes' do
-      expect(@renderer.instance_variable_get(:@_opengl_objects).size).to eq 6
+      expected_object_count = 3 * 3 * 3 + 1 # cubes + 1 room
+      expect(@renderer.instance_variable_get(:@_opengl_objects).size).to eq expected_object_count
     end
 
     def window_handle
