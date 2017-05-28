@@ -6,3 +6,6 @@ env:
   - SKIP_UI_TESTS=true
 script:
   - bundle exec rspec
+notifications:
+  email:
+    - nicolasganz37+travis@gmail.com
