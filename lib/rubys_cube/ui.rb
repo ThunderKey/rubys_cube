@@ -2,6 +2,8 @@ require 'mittsu'
 
 class RubysCube
   class Ui
+    CAMERA_DISTANCE = 5.0
+
     DEFAULT_COLORS = [
       0xFFFFFF, # white
       0xB71234, # red
@@ -40,11 +42,9 @@ class RubysCube
 
     def setup_camera
       @camera = Mittsu::PerspectiveCamera.new(75.0, @screen_aspect, 0.1, 1000.0)
-      @camera.position.z = 5.0
-      @camera.position.y = 2.0
+      rotate_camera 1, 1
 
       position_start = nil
-      original_camera_position = nil
       @renderer.window.on_mouse_button_pressed do |button, position|
         original_camera_position = @camera.position
         position_start = position
@@ -54,9 +54,11 @@ class RubysCube
       end
       @renderer.window.on_mouse_move do |position|
         if position_start
-          puts "#{position_start.x} - #{position.x} = #{position_start.x - position.x}"
-          @camera.position.x = original_camera_position.x - (position_start.x - position.x) / 1000
-          @camera.position.y = original_camera_position.y - (position_start.y - position.y) / 1000
+          rotate_camera(
+            2 * (position_start.x - position.x) / @renderer.window.instance_variable_get(:@width),
+            2 * (position_start.y - position.y) / @renderer.window.instance_variable_get(:@height),
+          )
+          position_start = position
         end
       end
     end
@@ -86,6 +88,26 @@ class RubysCube
       # white, half intensity
       light = Mittsu::HemisphereLight.new(0xFFFFFF, 0xFFFFFF, 0.5)
       @scene.add(light)
+    end
+
+    def rotate_camera move_x, move_y
+      circumference = 2 * Math::PI + CAMERA_DISTANCE
+      radius_x = (move_x / circumference) * 2 * Math::PI
+      radius_y = (move_y / circumference) * 2 * Math::PI
+      x = Math.sin(radius_x) * CAMERA_DISTANCE
+      y = Math.sin(radius_y) * CAMERA_DISTANCE
+      z = [
+        Math.cos(radius_x),
+        Math.cos(radius_y),
+      ].min * CAMERA_DISTANCE
+      set_camera x, y, z
+    end
+
+    def set_camera x, y, z
+      @camera.position.x = x
+      @camera.position.y = y
+      @camera.position.z = z
+      @camera.look_at Mittsu::Vector3.new(0,0,0)
     end
   end
 end
