@@ -23,8 +23,16 @@ class RubysCube
       @screen_aspect = @screen_width.to_f / @screen_height.to_f
     end
 
+    def screen_width
+      @renderer ? @renderer.window.instance_variable_get(:@width) : @screen_width
+    end
+
+    def screen_height
+      @renderer ? @renderer.window.instance_variable_get(:@height) : @screen_height
+    end
+
     def start
-      @renderer = Mittsu::OpenGLRenderer.new width: @screen_width, height: @screen_height, title: %q{Ruby's Cube}
+      @renderer = Mittsu::OpenGLRenderer.new width: screen_width, height: screen_height, title: %q{Ruby's Cube}
 
       @scene = Mittsu::Scene.new
 
@@ -42,7 +50,7 @@ class RubysCube
 
     def setup_camera
       @camera = Mittsu::PerspectiveCamera.new(75.0, @screen_aspect, 0.1, 1000.0)
-      rotate_camera 1, 1
+      rotate_camera 0.2, 0.2
 
       position_start = nil
       @renderer.window.on_mouse_button_pressed do |button, position|
@@ -55,8 +63,8 @@ class RubysCube
       @renderer.window.on_mouse_move do |position|
         if position_start
           rotate_camera(
-            2 * (position_start.x - position.x) / @renderer.window.instance_variable_get(:@width),
-            2 * (position_start.y - position.y) / @renderer.window.instance_variable_get(:@height),
+            2 * (position_start.x - position.x) / screen_width,
+            2 * (position_start.y - position.y) / screen_height,
           )
           position_start = position
         end
@@ -90,16 +98,17 @@ class RubysCube
       @scene.add(light)
     end
 
+    # 1 = 360 degrees
     def rotate_camera move_x, move_y
-      circumference = 2 * Math::PI + CAMERA_DISTANCE
-      radius_x = (move_x / circumference) * 2 * Math::PI
-      radius_y = (move_y / circumference) * 2 * Math::PI
+      circumference = 2.0 * Math::PI * CAMERA_DISTANCE
+      current_x = @camera.position.x / circumference
+      current_y = @camera.position.y / circumference
+      radius_x = (current_x + move_x) * 2 * Math::PI
+      radius_y = (current_x + move_y) * 2 * Math::PI
       x = Math.sin(radius_x) * CAMERA_DISTANCE
       y = Math.sin(radius_y) * CAMERA_DISTANCE
-      z = [
-        Math.cos(radius_x),
-        Math.cos(radius_y),
-      ].min * CAMERA_DISTANCE
+      z_square = CAMERA_DISTANCE**2 - x**2 - y**2
+      z = z_square < 0 ? -Math.sqrt(-z_square) : Math.sqrt(z_square)
       set_camera x, y, z
     end
 
