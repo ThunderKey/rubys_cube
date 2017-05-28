@@ -35,6 +35,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
+    rspec-wait (0.0.9)
+      rspec (>= 3, < 4)
     slop (3.6.0)
 
 PLATFORMS
@@ -45,6 +47,7 @@ DEPENDENCIES
   pry (~> 0.10)
   rake (~> 10.0)
   rspec (~> 3.0)
+  rspec-wait (~> 0.0)
   rubys_cube!
 
 BUNDLED WITH
