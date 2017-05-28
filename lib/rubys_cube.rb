@@ -8,6 +8,7 @@ class RubysCube
     require_relative 'rubys_cube/ui'
     @ui = Ui.new(self)
     @ui_thread = Thread.new { @ui.start }
+    @ui_thread.abort_on_exception = true
   end
 
   def wait_for_ui
