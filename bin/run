@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'rubys_cube'
+
+cube = RubysCube.new
+cube.start_ui
+cube.wait_for_ui
