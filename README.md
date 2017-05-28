@@ -8,6 +8,15 @@ TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
+Make sure the following tools are installed on your system:
+```bash
+# OSX
+$ brew install glfw3
+
+# Ubuntu
+$ sudo apt-get install libglfw3
+```
+
 Add this line to your application's Gemfile:
 
 ```ruby
