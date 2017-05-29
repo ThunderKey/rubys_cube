@@ -1,20 +1,11 @@
 require 'mittsu'
+require_relative 'color_scheme'
 
 class RubysCube
   class Ui
-    DEFAULT_COLORS = [
-      0xFFFFFF, # white
-      0xB71234, # red
-      0x009B48, # green
-      0xF55500, # orange
-      0x0046AD, # blue
-      0xFFD500, # yellow
-    ]
-
-    def initialize cube, colors: DEFAULT_COLORS, width: 800, height: 600, camera_distance: 5, spacing: 0.1
-      raise "there must be exactly 6 colors: #{colors.inspect}" if colors.size != 6
+    def initialize cube, color_scheme: ColorScheme.default, width: 800, height: 600, camera_distance: 5, spacing: 0.1
       @cube = cube
-      @colors = colors.freeze
+      @color_scheme = color_scheme
 
       @camera_distance = camera_distance.to_f
       @screen_width = width.to_f
@@ -72,7 +63,7 @@ class RubysCube
     end
 
     def setup_cube
-      faces = Mittsu::MeshFaceMaterial.new(@colors.map {|c| Mittsu::MeshBasicMaterial.new(color: c)})
+      faces = @color_scheme.to_mesh_face_material
       (0..2).to_a.repeated_permutation(3).each do |x,y,z|
         box = Mittsu::Mesh.new(
           Mittsu::BoxGeometry.new(1.0, 1.0, 1.0),
