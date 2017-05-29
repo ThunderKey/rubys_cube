@@ -2,8 +2,6 @@ require 'mittsu'
 
 class RubysCube
   class Ui
-    CAMERA_DISTANCE = 5.0
-
     DEFAULT_COLORS = [
       0xFFFFFF, # white
       0xB71234, # red
@@ -13,14 +11,16 @@ class RubysCube
       0xFFD500, # yellow
     ]
 
-    def initialize cube, colors: DEFAULT_COLORS, width: 800, height: 600
+    def initialize cube, colors: DEFAULT_COLORS, width: 800, height: 600, camera_distance: 5, spacing: 0.1
       raise "there must be exactly 6 colors: #{colors.inspect}" if colors.size != 6
       @cube = cube
       @colors = colors.freeze
 
-      @screen_width = width
-      @screen_height = height
-      @screen_aspect = @screen_width.to_f / @screen_height.to_f
+      @camera_distance = camera_distance.to_f
+      @screen_width = width.to_f
+      @screen_height = height.to_f
+      @screen_aspect = @screen_width / @screen_height
+      @spacing = spacing
     end
 
     def screen_width
@@ -72,20 +72,21 @@ class RubysCube
     end
 
     def setup_cube
+      faces = Mittsu::MeshFaceMaterial.new(@colors.map {|c| Mittsu::MeshBasicMaterial.new(color: c)})
       (0..2).to_a.repeated_permutation(3).each do |x,y,z|
         box = Mittsu::Mesh.new(
           Mittsu::BoxGeometry.new(1.0, 1.0, 1.0),
-          Mittsu::MeshBasicMaterial.new(color: @colors[(x + y + z) % @colors.size])
+          faces
         )
-        box.position.x = x - 1
-        box.position.y = y - 1
-        box.position.z = z - 1
+        box.position.x = x - 1 + (x-1) * @spacing
+        box.position.y = y - 1 + (y-1) * @spacing
+        box.position.z = z - 1 + (z-1) * @spacing
         @scene.add box
       end
     end
 
     def setup_room
-      room_material = Mittsu::MeshPhongMaterial.new(color: 0xffffff)
+      room_material = Mittsu::MeshPhongMaterial.new(color: 0xFFFFFF)
       room_material.side = Mittsu::BackSide
       room = Mittsu::Mesh.new(Mittsu::SphereGeometry.new(1.0), room_material)
       room.scale.set(10.0, 10.0, 10.0)
