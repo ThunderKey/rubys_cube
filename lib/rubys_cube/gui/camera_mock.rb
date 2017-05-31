@@ -1,6 +1,6 @@
 require_relative 'camera'
 
-class RubysCube
+module RubysCube
   class Gui
     class CameraMock < Camera
       def to_mittsu_camera

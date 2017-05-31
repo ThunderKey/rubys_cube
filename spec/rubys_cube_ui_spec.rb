@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-RSpec.describe RubysCube do
+RSpec.describe RubysCube::Puzzle do
   unless ENV['SKIP_UI_TESTS'] == 'true'
     before do
       @cube = described_class.new

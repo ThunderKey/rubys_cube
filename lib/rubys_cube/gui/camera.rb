@@ -1,4 +1,4 @@
-class RubysCube
+module RubysCube
   class Gui
     class Camera
       attr_reader :width, :height

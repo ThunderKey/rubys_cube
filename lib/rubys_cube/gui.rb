@@ -1,9 +1,9 @@
 require 'mittsu'
-require_relative 'color_scheme'
+require_relative 'gui/color_scheme'
 require_relative 'gui/dispatcher'
 require_relative 'gui/camera'
 
-class RubysCube
+module RubysCube
   class Gui
     attr_reader :dispatcher
 
@@ -30,6 +30,10 @@ class RubysCube
 
         @dispatcher.execute self
       end
+    end
+
+    def rotate_cube
+      @boxes.flatten.each {|b| b.rotation.x += 0.1 }
     end
 
     private
