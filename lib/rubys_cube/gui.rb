@@ -1,13 +1,17 @@
 require 'mittsu'
 require_relative 'color_scheme'
+require_relative 'gui/dispatcher'
 require_relative 'gui/camera'
 
 class RubysCube
   class Gui
+    attr_reader :dispatcher
+
     def initialize cube, color_scheme: nil, spacing: nil, camera: nil
       @cube = cube
       @color_scheme = color_scheme || ColorScheme.default
       @spacing = spacing || 0.1
+      @dispatcher = Dispatcher.new
       @camera = camera || Camera.new
     end
 
@@ -23,6 +27,8 @@ class RubysCube
 
       @renderer.window.run do
         @renderer.render(@scene, @camera.to_mittsu_camera)
+
+        @dispatcher.execute self
       end
     end
 
