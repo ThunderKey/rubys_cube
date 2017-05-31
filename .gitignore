@@ -1,5 +1,6 @@
 /.bundle/
 /vendor/bundle
+/vendor/gems
 /.yardoc
 /_yardoc/
 /coverage/
