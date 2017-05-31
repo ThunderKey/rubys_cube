@@ -1,6 +1,8 @@
 require_relative 'rubys_cube/version'
 
 class RubysCube
+  attr_reader :gui
+
   def initialize
   end
 
