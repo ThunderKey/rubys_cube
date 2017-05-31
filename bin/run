@@ -5,5 +5,10 @@ require 'pry'
 require 'rubys_cube'
 
 cube = RubysCube.new
-cube.start_ui
-cube.wait_for_ui
+camera = nil
+if ENV['MOCK'] == 'true'
+  require 'rubys_cube/gui/camera_mock'
+  camera = RubysCube::Gui::CameraMock.new
+end
+cube.start_gui camera: camera
+cube.wait_for_gui
