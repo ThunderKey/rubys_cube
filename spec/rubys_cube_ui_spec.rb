@@ -1,10 +1,10 @@
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe RubysCube do
   unless ENV['SKIP_UI_TESTS'] == 'true'
     before do
       @cube = described_class.new
-      @cube.start_ui
+      @cube.start_gui
       wait_for do
         @renderer = @cube.instance_variable_get(:@ui).
           instance_variable_get(:@renderer)
@@ -13,7 +13,7 @@ RSpec.describe RubysCube do
 
     after do
       glfwSetWindowShouldClose window_handle, 1
-      @cube.wait_for_ui
+      @cube.wait_for_gui
     end
 
     it 'has the correct amount of boxes' do
